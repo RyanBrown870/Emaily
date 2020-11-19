@@ -15,9 +15,13 @@ const app = express();
 app.use(
     cookieSession({
         maxAge: 30 * 24 * 60 * 60 * 1000,           // amount time cookie stays valid befor needing a new one
-        keys: []                                    // Pull from config.keys
+        keys: [keys.cookieKey]                      // Pull from config.keys, need an array
     })
 )
+
+// Tell app to use the cookie keys
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Higher order function call as authRoutes is module exported as arrow function. app gets passed as argument
 require('./routes/authRoutes')(app);    

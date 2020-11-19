@@ -13,7 +13,7 @@ passport.serializeUser((user, done) => {
 // Turns id (cookie token) back into a model instance for Mongo.
 passport.deserializeUser((id, done) => {
   // Need to search DB for a record with this id:
-  User.findById(is).then(user => {
+  User.findById(id).then(user => {
     done(null, user);
   })
 })

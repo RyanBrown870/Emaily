@@ -11,4 +11,18 @@ module.exports = (app) => {
 
   // Second route handler to exchange code from url (after auth/google/callback) to get user info
   app.get("/auth/google/callback", passport.authenticate("google"));
+
+  // Logout route handler
+  app.get("/api/logout", (req, res) => {
+    req.logout();
+    res.send(req.user)
+  });
+
+  // Test our cookies with another route handlers:
+  //Called when request goes through this route. 
+  // arrow function gets called when go through this route. req = incoming request obj. res = outgoing response obj
+    app.get("/api/current_user", (req, res) => {
+      res.send(req.user);                           // immediate response to send req.user
+    })
+
 };
