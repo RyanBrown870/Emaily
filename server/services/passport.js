@@ -25,6 +25,7 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback", // This can be whatever you want (doesn't need to be auth etc)
+      proxy: true                           // Need this as auth won't let heroku proxy through unless enabled
     },
     (accessToken, refreshToken, profile, done) => {
       // Callback function as second argument. This fires after second route handler get's access token from google
