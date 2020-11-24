@@ -7,3 +7,10 @@ export const fetchUser = () => async (dispatch) => {
     
   dispatch({ type: FETCH_USER, payload: res.data });
 };
+
+// to update redux store with credits added, post call to this route and send token in post. Then send user model payload
+export const handleToken = token => async dispatch => {
+  const res = await axios.post('/api/stripe', token);
+
+  dispatch({ type: FETCH_USER, payload: res.data});
+}
