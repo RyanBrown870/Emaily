@@ -5,6 +5,7 @@ const passport = require("passport");
 const keys = require('./config/keys');
 const bodyParser = require("body-parser");      // this is a middleware, middlewares on the app.use() method
 require('./models/User');                // important these require statements are in this order.
+require('./models/Survey');
 require('./services/passport');
 
 
