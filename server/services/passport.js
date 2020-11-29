@@ -29,6 +29,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       // Callback function as second argument. This fires after second route handler get's access token from google
+      
       const existingUser = await User.findOne({ googleId: profile.id }); // Check if collection has any matching records (any googleId's maching this new profile.id)
 
       if (existingUser) {
