@@ -32,6 +32,7 @@ app.use(passport.session());
 // Higher order function call as authRoutes is module exported as arrow function. app gets passed as argument
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 // Only run inside production (heroku)
 
