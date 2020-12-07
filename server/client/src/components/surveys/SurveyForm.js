@@ -1,25 +1,64 @@
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form'
+import _ from "lodash";
+import React, { Component } from "react";
+import { reduxForm, Field } from "redux-form";
+import { Link } from 'react-router-dom';
+import SurveyField from "./SurveyField";
+import validateEmails from '../../utils/validateEmails';
+import formFields from './formFields';
+
 
 class SurveyForm extends Component {
-    render() {
-        return (
-            <div>
-                <form 
-                    onSubmit={this.props.handleSubmit(values => console.log(values))}
-                >
-                <Field 
-                    type="text"
-                    name="surveyTitle"
-                    component="input"
-                />
-                <button type="submit">Submit</button>
-                </form>
-            </div>
-        )
-    }
+  renderFields() {
+    return _.map(formFields, ({ label, name }) => {
+      return (
+        <Field key={name} component={SurveyField} type="text" label={label} name={name} />
+      );
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <form
+          onSubmit={this.props.handleSubmit(this.props.onSurveySubmit)}
+        >
+          {this.renderFields()}
+          <Link to="/surveys" className="red btn-flat white-text">
+          Cancel
+          </Link>
+          <button type="submit" className="teal btn-flat right white-text">
+              Next
+              <i className="material-icons right">done</i>
+              </button>
+        </form>
+      </div>
+    );
+  }
 }
 
+  function validate(values) {
+      // if errors is returned as empty object, then no errors in form.
+    const errors = {};
+
+    errors.emails = validateEmails(values.emails || '');
+
+    _.each(formFields, ({ name }) => {
+        // on the fly, subs in the name property we need on the values object
+        if (!values[name]) {
+            errors[name] = 'You must provide a value';
+        }
+    });
+
+    
+
+    return errors;
+  }
+
+
+
+
 export default reduxForm({
-    form: 'surveyForm'
+    validate,
+  form: "surveyForm",
+  destroyOnUnmount: false
 })(SurveyForm);
