@@ -31,7 +31,7 @@ module.exports = (app) => {
         }
       })
       .compact() // remove undefined records using compact method.
-      .uniqBy("email", "surveyId") // check whether there are repeated events from same email on the same surveyId and remove them.
+      .uniqBy('email', 'surveyId') // check whether there are repeated events from same email on the same surveyId and remove them.
       .each(({ surveyId, email, choice }) => {
         Survey.updateOne({
           _id: surveyId,
@@ -45,7 +45,6 @@ module.exports = (app) => {
       })
       .value();
 
-      console.log(events);
 
       res.send({});
     
