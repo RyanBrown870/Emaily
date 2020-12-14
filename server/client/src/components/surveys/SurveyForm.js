@@ -40,7 +40,7 @@ class SurveyForm extends Component {
       // if errors is returned as empty object, then no errors in form.
     const errors = {};
 
-    errors.emails = validateEmails(values.emails || '');
+    errors.recipients = validateEmails(values.recipients || '');
 
     _.each(formFields, ({ name }) => {
         // on the fly, subs in the name property we need on the values object
@@ -60,5 +60,5 @@ class SurveyForm extends Component {
 export default reduxForm({
     validate,
   form: "surveyForm",
-  destroyOnUnmount: false
+  destroyOnUnmount: false     // keep contents of form in memory when navigating away/unmounting component
 })(SurveyForm);
