@@ -12,12 +12,19 @@ const Survey = mongoose.model("surveys");
 // Can keep including arguments to post() for as long as you like before calling the req/res function.
 // Need to check if logged in and also if they have enough credits.
 module.exports = (app) => {
-  app.get("/api/surveys/thanks", (req, res) => {
+  app.get("/api/surveys", requireLogin, async (req, res) => {
+    const surveys = await Survey.find({ _user: req.user.id }).select({
+      recipients: false,
+    });
+
+    res.send(surveys);
+  });
+
+  app.get("/api/surveys/:surveyId/:choice", (req, res) => {
     res.send("Thanks for voting!");
   });
 
   app.post("/api/surveys/webhooks", (req, res) => {
-    
     const p = new Path("/api/surveys/:surveyId/:choice"); // create parser object. extract with colon the part of the path you want.
 
     // req.body has all the events so map over this using lodash library.
@@ -31,25 +38,26 @@ module.exports = (app) => {
         }
       })
       .compact() // remove undefined records using compact method.
-      .uniqBy('email', 'surveyId') // check whether there are repeated events from same email on the same surveyId and remove them.
+      .uniqBy("email", "surveyId") // check whether there are repeated events from same email on the same surveyId and remove them.
       .each(({ surveyId, email, choice }) => {
-        Survey.updateOne({
-          _id: surveyId,
-          recipients: {
-              $elemMatch: { email: email, responded: false }
+        Survey.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false },
+            },
+          },
+          {
+            $inc: { [choice]: 1 },
+            $set: { "recipients.$.responded": true },
+            lastResponded: new Date(),
           }
-      }, {
-          $inc: { [choice]: 1 },
-          $set: { 'recipients.$.responded': true }
-      }).exec()
+        ).exec();
       })
       .value();
 
-
-      res.send({});
-    
+    res.send({});
   });
-
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
     const { title, subject, body, recipients } = req.body;
