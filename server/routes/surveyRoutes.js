@@ -12,6 +12,14 @@ const Survey = mongoose.model("surveys");
 // Can keep including arguments to post() for as long as you like before calling the req/res function.
 // Need to check if logged in and also if they have enough credits.
 module.exports = (app) => {
+  app.delete("/api/surveys/delete/:surveyId", async (req, res) => {
+    console.log(req.params.id);
+    await Survey.deleteOne({ _id: req.params.surveyId });
+    
+    
+    res.redirect("/surveys");
+  });
+
   app.get("/api/surveys", requireLogin, async (req, res) => {
     const surveys = await Survey.find({ _user: req.user.id }).select({
       recipients: false,

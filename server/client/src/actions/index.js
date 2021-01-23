@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_USER, FETCH_SURVEYS } from "./types";
+import { FETCH_USER, FETCH_SURVEYS , DELETE_SURVEYS } from "./types";
 
 // redux thunk passes in dispatch automatically
 export const fetchUser = () => async (dispatch) => {
@@ -25,5 +25,11 @@ export const submitSurvey = (values, history) => async dispatch => {
 export const fetchSurveys = () => async dispatch => {
   const res = await axios.get('/api/surveys');
 
-  dispatch({ type: FETCH_SURVEYS, payload: res.data})
+  dispatch({ type: FETCH_SURVEYS, payload: res.data })
+}
+
+export const deleteSurvey = (id) => async dispatch => {
+  const res = await axios.delete(`/api/surveys/delete/${id}`);
+
+  dispatch({ type: DELETE_SURVEYS, payload: res.data })
 }
