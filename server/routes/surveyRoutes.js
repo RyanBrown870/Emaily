@@ -20,6 +20,21 @@ module.exports = (app) => {
     res.send(surveys);
   });
 
+  app.delete("/api/delete-survey/:id", (req, res) => {
+    console.log(req.params);
+    const id = req.params.id;
+    Survey.findByIdAndDelete(id)
+    // res.send("You deleted");
+    .then((result) => {
+
+    res.redirect("/api/surveys");
+        
+        })
+        .catch(err => {
+            console.log(err);
+        })
+  })
+
   app.get("/api/surveys/:surveyId/:choice", (req, res) => {
     res.send("Thanks for voting!");
   });
