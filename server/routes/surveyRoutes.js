@@ -27,7 +27,7 @@ module.exports = (app) => {
     // res.send("You deleted");
     .then((result) => {
 
-    res.redirect("/api/surveys");
+    res.send(req.user);
         
         })
         .catch(err => {
